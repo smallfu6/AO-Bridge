@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Card, Input, Button, Space, Typography, Spin } from "antd";
-import { ethers } from 'ethers';
 import Header from "@/components/Header";
 import styles from "./bridge.module.css";
 

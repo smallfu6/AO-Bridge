@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
-import { Card, Input, Button, Space, Typography } from "antd";
+import { Button } from "antd";
 
 import styles from "./header.module.css";
-
 import { useWallet } from "../pages/api/useWallet";
 
 
@@ -12,7 +10,6 @@ const formatAddress = (address: string) => {
 
 export default function Header() {
     const { account, connectWallet } = useWallet();
-
 
     return (
         <div className={styles.header}>
