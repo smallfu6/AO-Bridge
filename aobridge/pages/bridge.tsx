@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import styles from "./bridge.module.css";
 
 import { useWallet } from './api/useWallet';
-import { BridgeTtansaction } from "./api/bridge";
+import { BridgeTransaction } from "./api/bridge";
 
 const { Text } = Typography;
 const { TextArea } = Input;
@@ -20,7 +20,7 @@ const hexToString = (hex: string): string => {
 };
 
 export default function Bridge() {
-    const { signer, setSigner } = useWallet();
+    const { signer } = useWallet();
     const [result, setResult] = useState("");
     const [proof, setProof] = useState("");
     const [loading, setLoading] = useState(false);
@@ -28,18 +28,23 @@ export default function Bridge() {
     const handleBridge = async () => {
         setLoading(true);
         try {
-            const { lastRequestId, lastResponse, lastError, txReceipt } = await BridgeTtansaction(signer, proof);
-            // 在这里使用这三个变量
-            if (lastResponse === "0x") {
-                setResult("error");
+            const result = await BridgeTransaction(signer!, proof);
+            if (result) {
+                const { lastRequestId, lastResponse, lastError, txReceipt } = result;
+                // 在这里使用这三个变量
+                if (lastResponse === "0x") {
+                    setResult("error");
+                } else {
+                    setResult(hexToString(lastResponse));
+                }
+                console.log("Received values:");
+                console.log("lastRequestId:", lastRequestId);
+                console.log("lastResponse:", lastResponse);
+                console.log("lastError:", lastError);
+                console.log("Transaction Receipt:", txReceipt);
             } else {
-                setResult(hexToString(lastResponse));
+                console.error("Transaction failed or returned undefined.");
             }
-            console.log("Received values:");
-            console.log("lastRequestId:", lastRequestId);
-            console.log("lastResponse:", lastResponse);
-            console.log("lastError:", lastError);
-            console.log("Transaction Receipt:", txReceipt);
         } catch (error) {
             console.error("Error during bridge operation:", error);
         } finally {
@@ -68,7 +73,7 @@ export default function Bridge() {
                         Result: {result}
                     </Text>
                 </Space>
-                <Button type="primary"  disabled={proof.length <= 50}  size="large" block className={styles.button} onClick={handleBridge}>
+                <Button type="primary" disabled={proof.length <= 50} size="large" block className={styles.button} onClick={handleBridge}>
                     Bridge
                 </Button>
             </Card>

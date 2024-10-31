@@ -7,7 +7,7 @@ import { ABI } from "./abi";
 const consumerAddress = "0xbc38276Aa222cf14f45449a6A55baeDf164813c7";
 const subscriptionId = "1759";
 
-export const BridgeTtansaction = async (
+export const BridgeTransaction = async (
   signer: ethers.Signer,
   proof: string
 ) => {
